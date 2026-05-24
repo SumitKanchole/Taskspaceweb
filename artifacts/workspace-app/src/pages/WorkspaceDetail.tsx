@@ -70,19 +70,21 @@ function InviteModalContent({ workspaceId, members, setInviteOpen }: { workspace
 
   return (
     <div className="space-y-4 pt-4">
-      <div className="flex flex-col sm:flex-row gap-4 sm:items-end">
-        <div className="space-y-2 flex-1">
+      {/* Search + Role row — stacks on mobile */}
+      <div className="flex flex-col gap-3">
+        <div className="space-y-1.5">
           <Label>Search Users</Label>
-          <Input 
-            placeholder="Search by name or email..." 
-            value={search} 
-            onChange={(e) => setSearch(e.target.value)} 
+          <Input
+            placeholder="Search by name or email..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full"
           />
         </div>
-        <div className="space-y-2 w-full sm:w-[150px]">
+        <div className="space-y-1.5">
           <Label>Role</Label>
           <Select value={role} onValueChange={setRole}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="manager">Manager</SelectItem>
               <SelectItem value="member">Member</SelectItem>
@@ -92,7 +94,7 @@ function InviteModalContent({ workspaceId, members, setInviteOpen }: { workspace
         </div>
       </div>
 
-      <div className="mt-4 border rounded-md p-2 h-[250px] overflow-y-auto bg-muted/20">
+      <div className="mt-4 border rounded-md p-2 h-[240px] overflow-y-auto bg-muted/20">
         <h4 className="text-sm font-medium text-muted-foreground mb-2">Platform Users</h4>
         {isLoading ? (
           <div className="flex justify-center p-4"><Loader2 className="w-5 h-5 animate-spin text-muted-foreground" /></div>
@@ -105,16 +107,17 @@ function InviteModalContent({ workspaceId, members, setInviteOpen }: { workspace
             {users.map((u: any) => {
               const isMember = members.some((m: any) => m.userId === u.id);
               return (
-                <div key={u.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50 border border-transparent hover:border-border transition-colors">
-                  <div>
-                    <div className="font-medium text-sm">{u.name}</div>
-                    <div className="text-xs text-muted-foreground">{u.email}</div>
+                <div key={u.id} className="flex flex-wrap items-center justify-between gap-2 p-2 rounded-md hover:bg-muted/50 border border-transparent hover:border-border transition-colors">
+                  <div className="min-w-0">
+                    <div className="font-medium text-sm truncate">{u.name}</div>
+                    <div className="text-xs text-muted-foreground truncate max-w-[180px] sm:max-w-none">{u.email}</div>
                   </div>
                   {isMember ? (
-                    <Badge variant="secondary">Already in workspace</Badge>
+                    <Badge variant="secondary" className="shrink-0">Already added</Badge>
                   ) : (
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
+                      className="shrink-0"
                       onClick={() => onInvite(u.email)}
                       disabled={inviteMutation.isPending}
                     >

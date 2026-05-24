@@ -148,7 +148,7 @@ function MemberDashboard() {
         </div>
       ) : (
         <>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {/* Card 1: My Tasks */}
             <div className="bg-[#1e0e3b] border-0 border-b-[3px] border-b-[#5c42bd] rounded-2xl p-6 flex flex-row items-center gap-5 shadow-lg shadow-black/20">
               <div className="w-14 h-14 rounded-xl bg-[#5c42bd]/20 flex items-center justify-center shrink-0">
@@ -198,7 +198,7 @@ function MemberDashboard() {
             </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
             <ActivityFeed activities={summary.recentActivity} />
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
               <div className="bg-[#1e0e3b] rounded-2xl border border-white/5 shadow-lg overflow-hidden h-full flex flex-col min-h-[400px]">
@@ -273,18 +273,18 @@ function ActivityFeed({ activities }: { activities: any[] }) {
           ) : (
             <div className="divide-y divide-white/5 overflow-auto">
               {activities.map((activity) => (
-                <div key={activity.id} className="p-5 flex items-start gap-4 hover:bg-white/[0.02] transition-colors">
-                  <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0 text-sm font-bold text-blue-400">
+                <div key={activity.id} className="p-4 sm:p-5 flex items-start gap-3 hover:bg-white/[0.02] transition-colors">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0 text-sm font-bold text-blue-400">
                     {activity.user?.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white/80">
+                    <p className="text-sm font-medium text-white/80 break-words">
                       <span className="text-white font-bold">{activity.user?.name}</span>{" "}
                       {activity.action}{" "}
                       {activity.description && <span className="text-white">{activity.description}</span>}
                     </p>
-                    <p className="text-xs text-white/40 mt-1.5">
-                      {format(new Date(activity.createdAt), "MMM d, yyyy h:mm a")}
+                    <p className="text-xs text-white/40 mt-1">
+                      {format(new Date(activity.createdAt), "MMM d, h:mm a")}
                     </p>
                   </div>
                 </div>
