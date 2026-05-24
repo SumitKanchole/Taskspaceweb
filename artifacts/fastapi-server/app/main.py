@@ -38,33 +38,48 @@ app = FastAPI(
     generate_unique_id_function=custom_generate_unique_id
 )
 
-from app.api.api_router import api_router
-app.include_router(api_router, prefix=settings.API_V1_STR)
-
-
-# Configure CORS to allow frontend connections
+# ---------------------------------------------------------------------------
+# CORS — Permanent, robust configuration
+# ---------------------------------------------------------------------------
+# Why regex instead of a list:
+#   - Netlify generates unique preview URLs per deploy (e.g. abc123--taskspaceweb.netlify.app)
+#   - A static list would break every single preview deploy
+#   - allow_origin_regex matches ALL subdomains in one pattern, forever
+#
+# Pattern covers:
+#   *.netlify.app           -> all Netlify preview & production URLs
+#   localhost (any port)    -> local development
+#   127.0.0.1 (any port)   -> alternate local dev address
+# ---------------------------------------------------------------------------
 import os
-origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:5173",
-    os.getenv("NETLIFY_URL", "https://taskspaceweb.netlify.app")
-]
-frontend_url = os.getenv("FRONTEND_URL")
-if frontend_url:
-    origins.append(frontend_url)
+
+ALLOWED_ORIGIN_REGEX = (
+    r"https?://(localhost|127\.0\.0\.1)(:\d+)?"   # local dev, any port
+    r"|https://[a-zA-Z0-9\-]+\.netlify\.app"       # ALL netlify subdomains
+)
+
+# Additional explicit origins from env (custom domains, etc.)
+_extra_origins: list[str] = []
+for env_key in ("FRONTEND_URL", "NETLIFY_URL"):
+    val = os.getenv(env_key)
+    if val and val not in _extra_origins:
+        _extra_origins.append(val.rstrip("/"))
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=_extra_origins,            # explicit extras (optional safety net)
+    allow_origin_regex=ALLOWED_ORIGIN_REGEX, # covers ALL deploy previews + localhost
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+from app.api.api_router import api_router
+app.include_router(api_router, prefix=settings.API_V1_STR)
+
 @app.get("/")
 async def root():
-    return {"message": "Welcome to the FastAPI Backend"}
+    return {"message": "TaskSpace API — Online"}
 
 @app.get(f"{settings.API_V1_STR}/health")
 async def health_check():

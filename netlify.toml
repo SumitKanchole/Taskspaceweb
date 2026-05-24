@@ -3,19 +3,26 @@
   publish = "artifacts/workspace-app/dist/public"
 
 [build.environment]
-  # Netlify uses an older Node version by default, enforce a modern one
   NODE_VERSION = "20"
   PNPM_FLAGS = "--shamefully-hoist"
 
-# Proxy all /api/* requests to the Railway backend
-# Set RAILWAY_BACKEND_URL in your Netlify site's environment variables
-# e.g. https://happy-consideration-production-xxxx.up.railway.app
+# ---------------------------------------------------------------------------
+# API Proxy — The permanent fix for CORS
+# ---------------------------------------------------------------------------
+# All /api/* requests from the browser go to Netlify (same origin).
+# Netlify then server-side proxies them to Railway.
+# The browser NEVER sees a cross-origin request → CORS is completely bypassed.
+#
+# status = 200 means Netlify PROXIES (not redirects) the request.
+# force = true ensures this runs even if a matching file exists.
+# ---------------------------------------------------------------------------
 [[redirects]]
   from = "/api/*"
-  to = ":RAILWAY_BACKEND_URL/api/:splat"
+  to = "https://happy-consideration-production.up.railway.app/api/:splat"
   status = 200
   force = true
 
+# SPA fallback — must come AFTER the /api/* rule
 [[redirects]]
   from = "/*"
   to = "/index.html"
