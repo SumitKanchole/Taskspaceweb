@@ -1,0 +1,11 @@
+# Netlify Redirects
+# This file is copied into dist/public by Vite at build time.
+# It has highest priority in Netlify's redirect processing.
+#
+# Rule 1: Proxy all /api/* requests to Railway backend (server-side, no CORS)
+#   - status=200 means Netlify PROXIES the request (browser sees taskspaceweb.netlify.app)
+#   - :splat captures everything after /api/
+/api/*  https://happy-consideration-production.up.railway.app/api/:splat  200
+
+# Rule 2: SPA fallback — send all other routes to index.html (React Router)
+/*  /index.html  200
