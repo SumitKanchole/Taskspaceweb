@@ -7,6 +7,15 @@
   NODE_VERSION = "20"
   PNPM_FLAGS = "--shamefully-hoist"
 
+# Proxy all /api/* requests to the Railway backend
+# Set RAILWAY_BACKEND_URL in your Netlify site's environment variables
+# e.g. https://happy-consideration-production-xxxx.up.railway.app
+[[redirects]]
+  from = "/api/*"
+  to = ":RAILWAY_BACKEND_URL/api/:splat"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
