@@ -17,7 +17,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Briefcase, Bell, Settings, User, Shield, LogOut, ChevronRight, CheckSquare, ListTodo, Calendar, BarChart2, Users, Activity, Search, Plus } from "lucide-react";
+import { LayoutDashboard, Bell, Settings, User, Shield, LogOut, CheckSquare, ListTodo, Users, Activity, Search, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useLogout } from "@workspace/api-client-react";
 import { Input } from "@/components/ui/input";
@@ -103,22 +103,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                  <SidebarMenuItem className="mb-1">
-                    <SidebarMenuButton asChild isActive={location === "/calendar"} className="h-11 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all font-medium px-4 data-[active=true]:bg-white/10 data-[active=true]:text-white">
-                      <Link href="/calendar">
-                        <Calendar className="w-4 h-4" />
-                        <span>Calendar</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem className="mb-1">
-                    <SidebarMenuButton asChild isActive={location === "/reports"} className="h-11 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all font-medium px-4 data-[active=true]:bg-white/10 data-[active=true]:text-white">
-                      <Link href="/reports">
-                        <BarChart2 className="w-4 h-4" />
-                        <span>Reports</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
