@@ -45,10 +45,10 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 # Configure CORS to allow frontend connections
 import os
 origins = [
-    "http://localhost:3000", 
-    "http://127.0.0.1:3000", 
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
     "http://localhost:5173",
-    "https://taskspaceweb.netlify.app"
+    os.getenv("NETLIFY_URL", "https://taskspaceweb.netlify.app")
 ]
 frontend_url = os.getenv("FRONTEND_URL")
 if frontend_url:
